@@ -1,8 +1,12 @@
+#define PY_ARRAY_UNIQUE_SYMBOL pbcvt_ARRAY_API
+
 #include <iostream>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv/cv.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
 #include <boost/python.hpp>
 
-#include "conversion.h"
+#include "../include/CvBoostConverter.hpp"
 
 namespace py = boost::python;
 using namespace std;
@@ -13,11 +17,9 @@ typedef unsigned char uchar_t;
 /**
  * Displays an image, passed in from python as an ndarray.
  */
-void
-display(PyObject *img)
+void display(PyObject *img)
 {
-    NDArrayConverter cvt;
-    cv::Mat mat { cvt.toMat(img) };
+    cv::Mat mat { pbcvt::fromNDArrayToMat(img) };
     
     cv::namedWindow("display", CV_WINDOW_NORMAL);
     cv::imshow("display", mat);
@@ -30,8 +32,7 @@ display(PyObject *img)
  */
 PyObject* binarize(PyObject *grayImg, short threshold)
 {
-    NDArrayConverter cvt;
-    cv::Mat img { cvt.toMat(grayImg) };
+    cv::Mat img { pbcvt::fromNDArrayToMat(grayImg) };
     for (int i = 0; i < img.rows; ++i)
     {
         uchar_t *ptr = img.ptr<uchar_t>(i);
@@ -40,7 +41,9 @@ PyObject* binarize(PyObject *grayImg, short threshold)
             ptr[j] = ptr[j] < threshold ? 0 : 255;
         }
     }
-    return cvt.toNDArray(img);
+
+    PyObject *ret = pbcvt::fromMatToNDArray(img);
+    return ret;
 }
 
 /**
@@ -49,19 +52,14 @@ PyObject* binarize(PyObject *grayImg, short threshold)
  */
 PyObject* mul(PyObject *left, PyObject *right) {
 
-    cout << "MUL! STEP 1" << endl;
-
-    NDArrayConverter cvt;
     cv::Mat leftMat, rightMat;
-    leftMat = cvt.toMat(left);
-    rightMat = cvt.toMat(right);
-    cout << "MUL! STEP 2" << endl;
+    leftMat = pbcvt::fromNDArrayToMat(left);
+    rightMat = pbcvt::fromNDArrayToMat(right);
 
     auto r1 = leftMat.rows, c1 = leftMat.cols, r2 = rightMat.rows,
          c2 = rightMat.cols;
 
-
-    cout << "MUL! STEP 3 " <<  r1 << "x" << c1 << " - " <<  r2 << "x" << c2 << endl;
+    cout << "MUL! STEP 1 " <<  r1 << "x" << c1 << " - " <<  r2 << "x" << c2 << endl;
     // Work only with 2-D matrices that can be legally multiplied.
     if (c1 != r2)
     {
@@ -69,22 +67,51 @@ PyObject* mul(PyObject *left, PyObject *right) {
                         "Incompatible sizes for matrix multiplication.");
         py::throw_error_already_set();
     }
-
-    cout << "MUL! STEP 4 " << endl;
     cv::Mat result = leftMat * rightMat;
 
     string matAsString (result.begin<unsigned char>(), result.end<unsigned char>());
-    cout << "MUL! STEP 5 " <<  result.rows << "x" << result.cols << " - " << matAsString << endl;
-    PyObject* ret = cvt.toNDArray(result);
-
-    cout << "MUL! STEP 6 " << ret << endl;
+    cout << "MUL! STEP 2 " <<  result.rows << "x" << result.cols << " - " << matAsString << endl;
+    PyObject *ret = pbcvt::fromMatToNDArray(result);
     return ret;
+}
+
+PyObject* wrap2Mats(PyObject *left, PyObject *right) {
+
+    cv::Mat leftMat, rightMat;
+    leftMat = pbcvt::fromNDArrayToMat(left);
+    rightMat = pbcvt::fromNDArrayToMat(right);
+
+    vector<cv::Mat> list;
+    list.push_back(leftMat);
+    list.push_back(rightMat);
+
+    return pbcvt::std_vector_to_py_list(list, &pbcvt::fromMatToNDArray);
+}
+
+PyObject* passInts(PyObject *list) {
+    auto temp = pbcvt::py_list_to_std_vector<int>(list);
+    int total = 0;
+    for (auto id : temp) {
+        cout << id << endl;
+        total += id;
+    }
+    temp.push_back(total);
+    return pbcvt::std_vector_to_py_list(temp);
+}
+
+PyObject* passStrings(PyObject *list) {
+    auto temp = pbcvt::py_list_to_std_vector<string>(list);
+    for (auto id : temp) {
+        cout << id << endl;
+    }
+    temp.push_back("!!");
+    return pbcvt::std_vector_to_py_list(temp);
 }
 
 static void init()
 {
-    Py_Initialize();
     import_array();
+    Py_Initialize();
 }
 
 BOOST_PYTHON_MODULE(examples)
@@ -93,4 +120,7 @@ BOOST_PYTHON_MODULE(examples)
     py::def("display", display);
     py::def("binarize", binarize);
     py::def("mul", mul);
+    py::def("passInts", passInts);
+    py::def("passStrings", &passStrings);
+    py::def("wrap2Mats", &wrap2Mats);
 }

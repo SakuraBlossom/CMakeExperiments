@@ -59,6 +59,7 @@ catkin_install_python(PROGRAMS
 
 
 ########## For OpenCV ##########
+find_package(OpenCV REQUIRED)
 include_directories(/usr/local/include)
 include_directories(/usr/local/include/opencv)
 include_directories(/usr/local/include/opencv2)
@@ -122,7 +123,10 @@ install(TARGETS mycpplib
 
 
 add_library(examples SHARED
-  src/conversion.cpp
+  include/CvBoostConverter.hpp
+  src/pyboost_cv2_converter.cpp
+  src/pyboost_cv3_converter.cpp
+  src/pyboost_cv4_converter.cpp
   src/examples.cpp
 )
 # change output directory, so python can find the module, and set prefix to ""
@@ -137,7 +141,6 @@ target_link_libraries(examples
   ${Boost_LIBRARIES}
   ${OpenCV_LIBRARIES}
   ${PYTHON_LIBRARIES}
-
 )
 add_dependencies(examples
     ${PROJECT_NAME}_gencfg

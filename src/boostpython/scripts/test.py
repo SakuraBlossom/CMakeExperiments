@@ -36,10 +36,23 @@ def test_binarization():
     binarized = examples.binarize(image, 127)
     print(np.equal(expected, binarized).all())
 
+def test_print_list():
+    print(examples.passInts([1, 2, 3]))
+    print(examples.passStrings(['Hello', 'world', 'awesome']))
+
+def test_wrap_tolist():
+    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
+    b = np.array([[ 1., 0.], [ 2., 3.], [ 4., 4.], [-1., 2.]])
+    mylist = examples.wrap2Mats(a, b)
+    print(mylist[0])
+    print(mylist[1])
+
 if __name__ == '__main__':
     test_vector_multiplication()
     test_matrix_squaring()
     test_matrix_multiplication()
     test_identity_multiplication()
     test_binarization()
+    test_print_list()
+    test_wrap_tolist()
 
