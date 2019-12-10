@@ -123,7 +123,6 @@ install(TARGETS mycpplib
 
 
 add_library(examples SHARED
-  include/CvBoostConverter.hpp
   src/pyboost_cv2_converter.cpp
   src/pyboost_cv3_converter.cpp
   src/pyboost_cv4_converter.cpp

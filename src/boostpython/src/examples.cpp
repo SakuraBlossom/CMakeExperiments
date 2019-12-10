@@ -17,22 +17,18 @@ typedef unsigned char uchar_t;
 /**
  * Displays an image, passed in from python as an ndarray.
  */
-void display(PyObject *img)
-{
-    cv::Mat mat { pbcvt::fromNDArrayToMat(img) };
-    
+void display(cv::Mat img) {
     cv::namedWindow("display", CV_WINDOW_NORMAL);
-    cv::imshow("display", mat);
-    cv::waitKey(0);
+    cv::imshow("display", img);
+    cv::waitKey(10);
 }
 
 
 /**
  * Converts a grayscale image to a bilevel image.
  */
-PyObject* binarize(PyObject *grayImg, short threshold)
+cv::Mat binarize(cv::Mat img, short threshold)
 {
-    cv::Mat img { pbcvt::fromNDArrayToMat(grayImg) };
     for (int i = 0; i < img.rows; ++i)
     {
         uchar_t *ptr = img.ptr<uchar_t>(i);
@@ -42,19 +38,14 @@ PyObject* binarize(PyObject *grayImg, short threshold)
         }
     }
 
-    PyObject *ret = pbcvt::fromMatToNDArray(img);
-    return ret;
+    return img;
 }
 
 /**
  * Multiplies two ndarrays by first converting them to cv::Mat and returns
  * an ndarray containing the result back.
  */
-PyObject* mul(PyObject *left, PyObject *right) {
-
-    cv::Mat leftMat, rightMat;
-    leftMat = pbcvt::fromNDArrayToMat(left);
-    rightMat = pbcvt::fromNDArrayToMat(right);
+cv::Mat mul(cv::Mat leftMat, cv::Mat rightMat) {
 
     auto r1 = leftMat.rows, c1 = leftMat.cols, r2 = rightMat.rows,
          c2 = rightMat.cols;
@@ -71,15 +62,10 @@ PyObject* mul(PyObject *left, PyObject *right) {
 
     string matAsString (result.begin<unsigned char>(), result.end<unsigned char>());
     cout << "MUL! STEP 2 " <<  result.rows << "x" << result.cols << " - " << matAsString << endl;
-    PyObject *ret = pbcvt::fromMatToNDArray(result);
-    return ret;
+    return result;
 }
 
-PyObject* wrap2Mats(PyObject *left, PyObject *right) {
-
-    cv::Mat leftMat, rightMat;
-    leftMat = pbcvt::fromNDArrayToMat(left);
-    rightMat = pbcvt::fromNDArrayToMat(right);
+PyObject* wrap2Mats(cv::Mat leftMat, cv::Mat rightMat) {
 
     vector<cv::Mat> list;
     list.push_back(leftMat);
@@ -111,6 +97,7 @@ PyObject* passStrings(PyObject *list) {
 
 std::tuple<int, float> tupid1(std::tuple<int, float> t){return t;}
 std::tuple<int, double, string> tupid2(std::tuple<int, double, string> t){return t;}
+std::tuple<int, double, cv::Mat> tupid3(std::tuple<int, double, cv::Mat> t){return t;}
 
 BOOST_PYTHON_MODULE(examples)
 {
@@ -124,4 +111,5 @@ BOOST_PYTHON_MODULE(examples)
     py::def("wrap2Mats", &wrap2Mats);
     py::def("tupid1", tupid1);
     py::def("tupid2", tupid2);
+    py::def("tupid3", tupid3);
 }

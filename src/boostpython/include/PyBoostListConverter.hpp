@@ -33,8 +33,7 @@ inline PyObject* std_vector_to_py_list(std::vector<T> vector) {
     for (iter = vector.begin(); iter != vector.end(); ++iter) {
         list.append(*iter);
     }
-    Py_INCREF(list.ptr());
-    return list.ptr();
+    return py::incref(list.ptr());
 }
 
 template <class T>
@@ -46,8 +45,7 @@ inline PyObject* std_vector_to_py_list(std::vector<T> vector, PyObject* (*func)(
         py::object iterable(handle);
         list.append(iterable);
     }
-    Py_INCREF(list.ptr());
-    return list.ptr();
+    return py::incref(list.ptr());
 }
 
 } // end namespace pbcvt

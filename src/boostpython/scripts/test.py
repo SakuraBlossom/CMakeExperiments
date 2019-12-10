@@ -53,6 +53,9 @@ def test_wrap_tuple():
     print(mytuple1)
     mytuple2 = examples.tupid2((5, 1.55, "Hi"))
     print(mytuple2)
+    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
+    mytuple3 = examples.tupid3((5, 1.55, a))
+    print(mytuple3)
 
 if __name__ == '__main__':
     test_vector_multiplication()
