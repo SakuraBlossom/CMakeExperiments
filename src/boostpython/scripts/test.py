@@ -10,8 +10,8 @@ def test_vector_multiplication():
     res2 = a.dot(b)
     print(res2)
     res1 = examples.mul(a, b)
-    print("res: {} == {}", res1, res2)
-    print(np.equal(res1, res2).all())
+    print("res: {} == {}".format(res1, res2))
+    examples.printStr(str(np.equal(res1, res2).all()))
 
 def test_matrix_squaring():
     a = np.array([[1., 2., 3.], [4., 5., 6.],  [7., 8., 9.]])
@@ -57,6 +57,11 @@ def test_wrap_tuple():
     mytuple3 = examples.tupid3((5, 1.55, a))
     print(mytuple3)
 
+def test_none_tuple():
+    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
+    print(examples.tupidCheckNone((5, 1.55, a)))
+    print(examples.tupidCheckNone(None))
+
 if __name__ == '__main__':
     test_vector_multiplication()
     test_matrix_squaring()
@@ -66,4 +71,5 @@ if __name__ == '__main__':
     test_print_list()
     test_wrap_tolist()
     test_wrap_tuple()
+    test_none_tuple()
 

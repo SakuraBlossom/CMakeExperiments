@@ -23,6 +23,11 @@ void display(cv::Mat img) {
     cv::waitKey(10);
 }
 
+void printStr(std::string str) {
+    cout << str << endl;
+}
+
+
 
 /**
  * Converts a grayscale image to a bilevel image.
@@ -99,11 +104,18 @@ std::tuple<int, float> tupid1(std::tuple<int, float> t){return t;}
 std::tuple<int, double, string> tupid2(std::tuple<int, double, string> t){return t;}
 std::tuple<int, double, cv::Mat> tupid3(std::tuple<int, double, cv::Mat> t){return t;}
 
+
+bool tupidCheckNone(PyObject *t) {
+    auto myTuple = py::extract<std::tuple<int, double, cv::Mat>>(t);
+    return myTuple.check();
+}
+
 BOOST_PYTHON_MODULE(examples)
 {
     import_array();
     pbcvt::initPyBindings();
     py::def("display", display);
+    py::def("printStr", printStr);
     py::def("binarize", binarize);
     py::def("mul", mul);
     py::def("passInts", passInts);
@@ -112,4 +124,5 @@ BOOST_PYTHON_MODULE(examples)
     py::def("tupid1", tupid1);
     py::def("tupid2", tupid2);
     py::def("tupid3", tupid3);
+    py::def("tupidCheckNone", tupidCheckNone);
 }
