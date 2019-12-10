@@ -1,13 +1,16 @@
 #ifndef PYBOOSTCONVERTER_HPP_SL
 #define PYBOOSTCONVERTER_HPP_SL
 
+#include <variant>
 #include <string>
 
 #include "PyBoostCvMatConverter.hpp"
 #include "PyBoostListConverter.hpp"
 #include "PyBoostTupleConverter.hpp"
+#include "PyBoostDictConverter.hpp"
 
 namespace pbcvt {
+
 
 static void export_cpptuple_conv() {
     create_tuple_converter<int, float>();
@@ -26,6 +29,8 @@ static void initPyBindings() {
         boost::python::type_id<cv::Mat>());
 
     export_cpptuple_conv();
+
+    import_array();
 }
 
 } // end namespace pbcvt

@@ -62,6 +62,18 @@ def test_none_tuple():
     print(examples.tupidCheckNone((5, 1.55, a)))
     print(examples.tupidCheckNone(None))
 
+def test_dict():
+    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
+    thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
+    print(examples.readDictStringOnly(thisdict))
+    print(examples.readDict(thisdict))
+
+def test_dict_errorChecks():
+    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
+    thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
+    print(examples.readDictStringOnly(thisdict))
+    print(examples.readDict(thisdict))
+
 if __name__ == '__main__':
     test_vector_multiplication()
     test_matrix_squaring()
@@ -72,4 +84,5 @@ if __name__ == '__main__':
     test_wrap_tolist()
     test_wrap_tuple()
     test_none_tuple()
+    test_dict()
 

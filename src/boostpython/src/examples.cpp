@@ -1,5 +1,6 @@
 #define PY_ARRAY_UNIQUE_SYMBOL pbcvt_ARRAY_API
 
+#include <map>
 #include <iostream>
 #include <opencv/cv.hpp>
 #include <opencv2/core/core.hpp>
@@ -54,8 +55,7 @@ cv::Mat mul(cv::Mat leftMat, cv::Mat rightMat) {
 
     auto r1 = leftMat.rows, c1 = leftMat.cols, r2 = rightMat.rows,
          c2 = rightMat.cols;
-
-    cout << "MUL! STEP 1 " <<  r1 << "x" << c1 << " - " <<  r2 << "x" << c2 << endl;
+    
     // Work only with 2-D matrices that can be legally multiplied.
     if (c1 != r2)
     {
@@ -66,7 +66,6 @@ cv::Mat mul(cv::Mat leftMat, cv::Mat rightMat) {
     cv::Mat result = leftMat * rightMat;
 
     string matAsString (result.begin<unsigned char>(), result.end<unsigned char>());
-    cout << "MUL! STEP 2 " <<  result.rows << "x" << result.cols << " - " << matAsString << endl;
     return result;
 }
 
@@ -76,7 +75,7 @@ PyObject* wrap2Mats(cv::Mat leftMat, cv::Mat rightMat) {
     list.push_back(leftMat);
     list.push_back(rightMat);
 
-    return pbcvt::std_vector_to_py_list(list, &pbcvt::fromMatToNDArray);
+    return pbcvt::std_vector_to_py_list(list);
 }
 
 PyObject* passInts(PyObject *list) {
@@ -95,15 +94,34 @@ PyObject* passStrings(PyObject *list) {
     for (auto id : temp) {
         cout << id << endl;
     }
-    temp.push_back("!!");
+    temp.push_back("!!!");
     return pbcvt::std_vector_to_py_list(temp);
 }
 
 
+PyObject* readDictStringOnly(PyObject *dict) {
+    auto myMap = pbcvt::fromPythonAsStringDict(dict);
+
+    for(auto elem : myMap) {
+        std::cout << elem.first << " " << elem.second << "\n";
+    }
+
+    return pbcvt::toPythonDict(myMap);
+}
+
+PyObject* readDict(PyObject *dict) {
+    auto myMap = pbcvt::fromPythonDict(dict);
+
+    for(auto elem : myMap) {
+        std::cout << elem.first << " " << pbcvt::streamer{elem.second} << "\n";
+    }
+
+    return pbcvt::toPythonDict(myMap);
+}
+
 std::tuple<int, float> tupid1(std::tuple<int, float> t){return t;}
 std::tuple<int, double, string> tupid2(std::tuple<int, double, string> t){return t;}
 std::tuple<int, double, cv::Mat> tupid3(std::tuple<int, double, cv::Mat> t){return t;}
-
 
 bool tupidCheckNone(PyObject *t) {
     auto myTuple = py::extract<std::tuple<int, double, cv::Mat>>(t);
@@ -125,4 +143,6 @@ BOOST_PYTHON_MODULE(examples)
     py::def("tupid2", tupid2);
     py::def("tupid3", tupid3);
     py::def("tupidCheckNone", tupidCheckNone);
+    py::def("readDictStringOnly", readDictStringOnly);
+    py::def("readDict", readDict);
 }

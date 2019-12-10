@@ -1,5 +1,5 @@
-#ifndef PYBOOSTCONVERTER_HPP_LIST_SL
-#define PYBOOSTCONVERTER_HPP_LIST_SL
+#ifndef PYBOOSTCONVERTER_HPP_DICT_SL
+#define PYBOOSTCONVERTER_HPP_DICT_SL
 
 #include <cstdio>
 #include <vector>
@@ -28,22 +28,9 @@ inline std::vector< T > py_list_to_std_vector(PyObject *list) {
 
 template <class T>
 inline PyObject* std_vector_to_py_list(std::vector<T> vector) {
-    typename std::vector<T>::iterator iter;
     py::list list;
-    for (iter = vector.begin(); iter != vector.end(); ++iter) {
+    for (auto iter = vector.begin(); iter != vector.end(); ++iter) {
         list.append(*iter);
-    }
-    return py::incref(list.ptr());
-}
-
-template <class T>
-inline PyObject* std_vector_to_py_list(std::vector<T> vector, PyObject* (*func)(const T&)) {
-    typename std::vector<T>::iterator iter;
-    py::list list;
-    for (iter = vector.begin(); iter != vector.end(); ++iter) {
-        py::handle<> handle(py::borrowed(func(*iter)));
-        py::object iterable(handle);
-        list.append(iterable);
     }
     return py::incref(list.ptr());
 }
