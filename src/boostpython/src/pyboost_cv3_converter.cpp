@@ -7,7 +7,7 @@
  */
 #define NO_IMPORT_ARRAY
 #define PY_ARRAY_UNIQUE_SYMBOL pbcvt_ARRAY_API
-#include "../include/CvBoostConverter.hpp"
+#include "../include/PyBoostCvMatConverter.hpp"
 
 #if !defined CV_VERSION_EPOCH && CV_VERSION_MAJOR == 3
 namespace pbcvt {

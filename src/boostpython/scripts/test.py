@@ -47,6 +47,13 @@ def test_wrap_tolist():
     print(mylist[0])
     print(mylist[1])
 
+def test_wrap_tuple():
+    mytuple = (3, 3.14)
+    mytuple1 = examples.tupid1(mytuple)
+    print(mytuple1)
+    mytuple2 = examples.tupid2((5, 1.55, "Hi"))
+    print(mytuple2)
+
 if __name__ == '__main__':
     test_vector_multiplication()
     test_matrix_squaring()
@@ -55,4 +62,5 @@ if __name__ == '__main__':
     test_binarization()
     test_print_list()
     test_wrap_tolist()
+    test_wrap_tuple()
 

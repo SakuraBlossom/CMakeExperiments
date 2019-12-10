@@ -6,7 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <boost/python.hpp>
 
-#include "../include/CvBoostConverter.hpp"
+#include "../include/PyBoostConverter.hpp"
 
 namespace py = boost::python;
 using namespace std;
@@ -108,19 +108,20 @@ PyObject* passStrings(PyObject *list) {
     return pbcvt::std_vector_to_py_list(temp);
 }
 
-static void init()
-{
-    import_array();
-    Py_Initialize();
-}
+
+std::tuple<int, float> tupid1(std::tuple<int, float> t){return t;}
+std::tuple<int, double, string> tupid2(std::tuple<int, double, string> t){return t;}
 
 BOOST_PYTHON_MODULE(examples)
 {
-    init();
+    import_array();
+    pbcvt::initPyBindings();
     py::def("display", display);
     py::def("binarize", binarize);
     py::def("mul", mul);
     py::def("passInts", passInts);
     py::def("passStrings", &passStrings);
     py::def("wrap2Mats", &wrap2Mats);
+    py::def("tupid1", tupid1);
+    py::def("tupid2", tupid2);
 }
