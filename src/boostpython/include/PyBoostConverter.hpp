@@ -9,6 +9,10 @@
 #include "PyBoostTupleConverter.hpp"
 #include "PyBoostDictConverter.hpp"
 
+#include <boost/python/init.hpp>
+#include <boost/python/class.hpp>
+#include <boost/python/class_fwd.hpp>
+
 namespace pbcvt {
 
 static void export_cpptuple_conv() {
@@ -19,12 +23,15 @@ static void export_cpptuple_conv() {
 
 static void initPyBindings() {
 
+    py::type_info info = py::type_id<cv::Mat>(); 
+    const py::converter::registration* reg = py::converter::registry::query(info); 
+    if (reg != NULL && reg->m_to_python != NULL) {
+        return;
+    }
+    cout << "Initialising Python bindings!" << endl;
+
     Py_Initialize();
 
-    /*
-    if (py::converter::registry::query(py::type_id<cv::Mat>()) != nullptr) {
-        return;
-    }*/
 
     // Bindings for CV::Mat
     py::to_python_converter<cv::Mat, matToNDArrayBoostConverter>();

@@ -22,5 +22,9 @@ An experiment to perform custom CMake builds depending on a value of a system en
 ## Boost Python Binding
 Please build with `export PLATFORM=AUV4 && catkin_make`
 
-
+### To run the python calling a custom C++ lib example
 `rosrun boost_python_catkin_example test.py`
+
+### To run the C++ calling python (which uses a custom boost C++ lib) example
+`rosrun boost_python_catkin_example loadtest`
+

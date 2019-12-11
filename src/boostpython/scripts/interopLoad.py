@@ -7,7 +7,18 @@ print(os.environ['PYTHONPATH'])
 
 import boost_python_catkin_example.examples as examples
 
+
+
+class Animal():
+    pass
+
+class Mammal():
+    pass
+
 class Dog():
+    def __init__(self):
+        self.msg = 'Bark Bark'
+
     def test_wrap_tuple(self):
         mytuple = (3, 3.14)
         mytuple1 = examples.tupid1(mytuple)
@@ -28,9 +39,28 @@ class Dog():
         thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
         print(examples.readDictStringOnly(thisdict))
         print(examples.readDict(thisdict))
+
+    def test_vector_multiplication(self, input):
+        a = np.array(input).reshape(2, 3)
+        b = a.reshape(3, 2)
+        res2 = a.dot(b)
+        print("{}.{} = {}".format(a, b, res2))
+        res1 = examples.mul(a, b)
+        print("res: {} == {}".format(res1, res2))
+        examples.printStr(str(np.equal(res1, res2).all()))
     
-    def bark(self, message):
-        print("The dog barks: {}".format(message))
+    def learn(self, message, mat):
+        self.msg = message
+        print("The dog learns to bark: {}".format(message))
         self.test_wrap_tuple()
         self.test_none_tuple()
         self.test_dict()
+        self.test_vector_multiplication(mat)
+
+    
+    def bark(self):
+        print("The dog barks: {}".format(self.msg))
+        x = examples.Detector('pi')
+        x.value = 3.14
+        print('{} is around {}'.format(x.name, x.value))
+        return x

@@ -68,6 +68,12 @@ def test_dict():
     thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
     print(examples.readDictStringOnly(thisdict))
     print(examples.readDict(thisdict))
+
+def test_custom_class():
+    x = examples.Detector('pi')
+    x.value = 3.14
+    print('{} is around {}'.format(x.name, x.value))
+    return x
     
 if __name__ == '__main__':
     print(os.getcwd())
@@ -82,4 +88,5 @@ if __name__ == '__main__':
     test_wrap_tuple()
     test_none_tuple()
     test_dict()
+    test_custom_class()
 
