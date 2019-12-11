@@ -11,7 +11,6 @@
 
 namespace pbcvt {
 
-
 static void export_cpptuple_conv() {
     create_tuple_converter<int, float>();
     create_tuple_converter<int, double, std::string>();
@@ -19,14 +18,20 @@ static void export_cpptuple_conv() {
 }
 
 static void initPyBindings() {
+
     Py_Initialize();
 
+    /*
+    if (py::converter::registry::query(py::type_id<cv::Mat>()) != nullptr) {
+        return;
+    }*/
+
     // Bindings for CV::Mat
-    boost::python::to_python_converter<cv::Mat, matToNDArrayBoostConverter>();
-    boost::python::converter::registry::push_back(
+    py::to_python_converter<cv::Mat, matToNDArrayBoostConverter>();
+    py::converter::registry::push_back(
         &matFromNDArrayBoostConverter::convertible,
         &matFromNDArrayBoostConverter::construct,
-        boost::python::type_id<cv::Mat>());
+        py::type_id<cv::Mat>());
 
     export_cpptuple_conv();
 

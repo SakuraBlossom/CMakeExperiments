@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import sys
+import os
 import boost_python_catkin_example.examples as examples
 
 
@@ -67,14 +68,10 @@ def test_dict():
     thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
     print(examples.readDictStringOnly(thisdict))
     print(examples.readDict(thisdict))
-
-def test_dict_errorChecks():
-    a = np.array([[1., 2., 3., 4.], [4., 3., 2., 1.]])
-    thisdict = { "brand": "Ford", "model": "Mustang", "year": 1964, "size" : a }
-    print(examples.readDictStringOnly(thisdict))
-    print(examples.readDict(thisdict))
-
+    
 if __name__ == '__main__':
+    print(os.getcwd())
+    print(os.environ['PYTHONPATH'])
     test_vector_multiplication()
     test_matrix_squaring()
     test_matrix_multiplication()

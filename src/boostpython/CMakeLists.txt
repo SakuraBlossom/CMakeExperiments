@@ -51,7 +51,8 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 catkin_install_python(PROGRAMS
 	scripts/use_cpplib.py
 	scripts/test.py
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+	scripts/interopLoad.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 ###########
 ## Build ##
@@ -148,4 +149,28 @@ add_dependencies(examples
 install(TARGETS examples
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+)
+
+
+
+add_executable(loadtest
+  src/pyboost_cv2_converter.cpp
+  src/pyboost_cv3_converter.cpp
+  src/pyboost_cv4_converter.cpp
+  src/loadTest.cpp)
+# change output directory, so python can find the module, and set prefix to ""
+# to omit the default "lib".
+set_target_properties(loadtest PROPERTIES
+  PREFIX ""
+  LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}/${CATKIN_PACKAGE_PYTHON_DESTINATION}
+)
+
+target_link_libraries(loadtest
+  ${catkin_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  ${PYTHON_LIBRARIES}
+)
+add_dependencies(loadtest
+    ${PROJECT_NAME}_gencfg
 )

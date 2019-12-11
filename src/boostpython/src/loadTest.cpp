@@ -6,6 +6,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <boost/python.hpp>
+#include <cstdlib>
 
 #include "../include/PyBoostConverter.hpp"
 
@@ -13,6 +14,7 @@ namespace py = boost::python;
 using namespace std;
 
 typedef unsigned char uchar_t;
+
 
 /**
  * Displays an image, passed in from python as an ndarray.
@@ -127,20 +129,34 @@ bool tupidCheckNone(PyObject *t) {
     return myTuple.check();
 }
 
-BOOST_PYTHON_MODULE(examples)
+
+int main()
 {
+    // Allow Python to load modules from the current directory.
+    string envStr(getenv("PYTHONPATH"));
+    envStr += ":./src/boostpython/scripts";
+    setenv("PYTHONPATH", envStr.c_str(), 1);
+    // Initialize Python.
+
     pbcvt::initPyBindings();
-    py::def("display", display);
-    py::def("printStr", printStr);
-    py::def("binarize", binarize);
-    py::def("mul", mul);
-    py::def("passInts", passInts);
-    py::def("passStrings", &passStrings);
-    py::def("wrap2Mats", &wrap2Mats);
-    py::def("tupid1", tupid1);
-    py::def("tupid2", tupid2);
-    py::def("tupid3", tupid3);
-    py::def("tupidCheckNone", tupidCheckNone);
-    py::def("readDictStringOnly", readDictStringOnly);
-    py::def("readDict", readDict);
+
+    try
+    {
+        // >>> import MyPythonClass
+        py::object my_python_class_module = py::import("interopLoad");
+        
+        // >>> dog = MyPythonClass.Dog()
+        py::object dog = my_python_class_module.attr("Dog")();
+
+        // >>> dog.bark("woof");
+        dog.attr("bark")("woof");
+    }
+    catch (const py::error_already_set&)
+    {
+        PyErr_Print();
+        return 1;
+    }
+
+    return 0;
+    // Do not call Py_Finalize() with Boost.Python.
 }
