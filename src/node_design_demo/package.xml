@@ -1,0 +1,11 @@
+<package format="2">
+    <name>node_design_demo</name>
+    <description>node design demo</description>
+    <maintainer email="shawnlum123@gmail.com">Shawn</maintainer>
+    <license>Apache 2.0</license>
+    <version>0.0.1</version>
+    <buildtool_depend>catkin</buildtool_depend>
+    <depend>roscpp</depend>A
+    <depend>roslib</depend>
+    <depend>std_msgs</depend>
+</package>
