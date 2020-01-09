@@ -5,10 +5,7 @@
 #include <vector>
 #include <memory>
 
-#include <Python.h>
-#include <boost/python.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/python/stl_iterator.hpp>
+#include "PyBoostConfig.h"
 
 namespace pbcvt {
 

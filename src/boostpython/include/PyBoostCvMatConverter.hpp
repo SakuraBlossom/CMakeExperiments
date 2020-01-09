@@ -8,13 +8,9 @@
 #include <memory>
 #include <string>
 
-#include <Python.h>
-#include <numpy/ndarrayobject.h>
-#include <opencv2/core/core.hpp>
+#include "PyBoostConfig.h"
 
-#include <boost/python.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/python/stl_iterator.hpp>
+#include <opencv2/core/core.hpp>
 
 namespace pbcvt {
 
@@ -116,6 +112,7 @@ struct matFromNDArrayBoostConverter {
 	static void construct(PyObject* object,
 			py::converter::rvalue_from_python_stage1_data* data);
 };
+
 
 } // end namespace pbcvt
 

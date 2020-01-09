@@ -8,7 +8,7 @@ add_compile_options(-std=c++17)
 find_package(catkin REQUIRED)
 
 ## System dependencies are found with CMake's conventions
-find_package(Boost REQUIRED COMPONENTS python)
+find_package(Boost REQUIRED COMPONENTS python python3)
 find_package(PythonLibs 2.7 REQUIRED) # sets ${PYTHON_INCLUDE_DIRS}
 
 find_package(catkin REQUIRED COMPONENTS
@@ -49,6 +49,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
 
 catkin_install_python(PROGRAMS
+	scripts/cvtest.py
 	scripts/use_cpplib.py
 	scripts/test.py
 	scripts/interopLoad.py

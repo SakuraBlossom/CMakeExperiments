@@ -5,7 +5,8 @@
 #include <opencv/cv.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <boost/python.hpp>
+
+#include "../include/PyBoostConfig.h"
 
 #include "../include/Detector.h"
 #include "../include/PyBoostConverter.hpp"

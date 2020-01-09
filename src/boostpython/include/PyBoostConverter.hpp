@@ -9,9 +9,7 @@
 #include "PyBoostTupleConverter.hpp"
 #include "PyBoostDictConverter.hpp"
 
-#include <boost/python/init.hpp>
-#include <boost/python/class.hpp>
-#include <boost/python/class_fwd.hpp>
+#include "PyBoostConfig.h"
 
 namespace pbcvt {
 
@@ -46,5 +44,6 @@ static void initPyBindings() {
 }
 
 } // end namespace pbcvt
+
 
 #endif
